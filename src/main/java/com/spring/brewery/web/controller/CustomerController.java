@@ -1,15 +1,22 @@
 package com.spring.brewery.web.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spring.brewery.web.model.CustomerDto;
 import com.spring.brewery.web.service.CustomerService;
 
-@RequestMapping("/api/v1/customer")
+@RequestMapping("/api/v1/customer/")
 @RestController
 public class CustomerController {
 
@@ -35,7 +42,7 @@ public class CustomerController {
 	}
 	
 	@PostMapping
-    public ResponseEntity<String> handlePost(CustomerDto customerDto){
+    public ResponseEntity<String> handlePost(@Valid @RequestBody CustomerDto customerDto){
         CustomerDto savedDto = customerService.saveNewCustomer(customerDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -46,7 +53,7 @@ public class CustomerController {
 
     @PutMapping("/{customerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void handleUpdate(@PathVariable("customerId") UUID customerId, CustomerDto customerDto){
+    public void handleUpdate(@PathVariable("customerId") UUID customerId, @Valid @RequestBody CustomerDto customerDto){
         customerService.updateCustomer(customerId, customerDto);
     }
 
@@ -54,5 +61,17 @@ public class CustomerController {
     public void deleteById(@PathVariable("customerId")  UUID customerId){
         customerService.deleteById(customerId);
     }
+    
+    @ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<List<String>> validationErrorHandler(ConstraintViolationException ex){
+		List<String> errors = new ArrayList<String>(ex.getConstraintViolations().size());
+		
+		ex.getConstraintViolations().forEach(constraintVioltion->{
+			errors.add(constraintVioltion.getPropertyPath()+" : "+constraintVioltion.getMessage());
+		});
+		
+		return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
+		
+	}
 
 }
