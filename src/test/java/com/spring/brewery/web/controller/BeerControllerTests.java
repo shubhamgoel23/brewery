@@ -44,7 +44,11 @@ public class BeerControllerTests {
 
 	@BeforeEach
 	public void setUp() {
-		validBeer = BeerDto.builder().id(UUID.randomUUID()).beerName("Beer1").beerStyle("PALE_ALE").upc(123456789012L)
+		validBeer = BeerDto.builder()
+				.id(UUID.randomUUID())
+				.beerName("Beer1")
+//				.beerStyle("PALE_ALE")
+				.upc(123456789012L)
 				.build();
 	}
 
