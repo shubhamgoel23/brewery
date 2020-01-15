@@ -71,24 +71,24 @@ public class BeerController {
         beerService.deleteById(beerId);
     }
 	
-	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<List<String>> validationErrorHandler(ConstraintViolationException ex){
-		List<String> errors = new ArrayList<String>(ex.getConstraintViolations().size());
-		
-		ex.getConstraintViolations().forEach(constraintVioltion->{
-			errors.add(constraintVioltion.getPropertyPath()+" : "+constraintVioltion.getMessage());
-		});
-		
-		return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
-		
-	}
-	
-	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
-	public ResponseEntity<String> validationErrorHandler(MethodArgumentTypeMismatchException ex){
-		
-		
-		return new ResponseEntity<>(ex.getCause().getMessage(),HttpStatus.BAD_REQUEST);
-		
-	}
+//	@ExceptionHandler(ConstraintViolationException.class)
+//	public ResponseEntity<List<String>> validationErrorHandler(ConstraintViolationException ex){
+//		List<String> errors = new ArrayList<String>(ex.getConstraintViolations().size());
+//		
+//		ex.getConstraintViolations().forEach(constraintVioltion->{
+//			errors.add(constraintVioltion.getPropertyPath()+" : "+constraintVioltion.getMessage());
+//		});
+//		
+//		return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
+//		
+//	}
+//	
+//	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+//	public ResponseEntity<String> validationErrorHandler(MethodArgumentTypeMismatchException ex){
+//		
+//		
+//		return new ResponseEntity<>(ex.getCause().getMessage(),HttpStatus.BAD_REQUEST);
+//		
+//	}
 
 }
