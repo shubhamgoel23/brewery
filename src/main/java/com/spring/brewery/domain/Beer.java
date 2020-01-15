@@ -1,5 +1,6 @@
 package com.spring.brewery.domain;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 import com.spring.brewery.web.model.v2.BeerStyleEnum;
@@ -19,5 +20,7 @@ public class Beer {
 	private String beerName;
 	private BeerStyleEnum beerStyle;
 	private Long upc;
+	private Timestamp createdDate;
+    private Timestamp lastUpdatedDate;
 
 }
